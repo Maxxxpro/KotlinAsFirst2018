@@ -2,6 +2,7 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -19,12 +20,8 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean {
-    val a = number / 100
-    val b = a / 10 + a % 10
-    val c = (number % 100) / 10 + number % 10
-    return if (b == c) true else false
-}
+fun isNumberHappy(number: Int): Boolean =
+        number / 1000 + number / 100 % 10 == number % 100 / 10 + number % 10
 
 /**
  * Простая
@@ -34,7 +31,7 @@ fun isNumberHappy(number: Int): Boolean {
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
-        ((x1 == x2) || (y1 == y2) || (y1 - x1 == y2 - x2) || (x1 + y1 == x2 + y2))
+        (x1 == x2) || (y1 == y2) || abs (y2 - y1) == abs (x2 - x1)
 
 
 /**
@@ -46,7 +43,7 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
 fun daysInMonth(month: Int, year: Int): Int {
     if ((month == 2) && ((year % 400 == 0) || ((year % 4 == 0) && (year % 100 != 0)))) return 29
     return when (month) {
-        in listOf(1, 3, 5, 7, 8, 10, 12) -> 31
+        1, 3, 5, 7, 8, 10, 12 -> 31
         2 -> 28
         else -> 30
     }
@@ -72,9 +69,11 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
-        when {
-            ((maxOf(a, b, c) <= max(r, s)) && (min(r, s) >= minOf(a, b, c))) -> true
-            ((min(r, s) >= minOf(a, b, c)) && (max(r, s) >= ((a + b + c) - minOf(a, b, c) - maxOf(a, b, c)))) -> true
-            else -> false
-        }
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
+    val x = minOf(a, b, c)
+    val y = maxOf(a, b, c)
+    val x2 = minOf(r, s)
+    val y2 = maxOf(r, s)
+    val z = a + b + c - x - y
+    return x <= x2 && z <= y2
+}
