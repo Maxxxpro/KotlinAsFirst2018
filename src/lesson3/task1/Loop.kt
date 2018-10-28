@@ -75,7 +75,7 @@ fun digitNumber(n: Int): Int {
         result++
         number /= 10
     }
-        while (number > 0)
+        while (abs(number) > 0)
     return result
 }
 
