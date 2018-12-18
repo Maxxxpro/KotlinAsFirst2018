@@ -123,7 +123,9 @@ fun lcm(m: Int, n: Int): Int {
 fun minDivisor(n: Int): Int {
     var number = 2
     while (n % number != 0)
-    {number++}
+    {
+        number++
+    }
     return number
 }
 
@@ -160,7 +162,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     val x = sqrt(m.toDouble()).toInt()
     val y = sqrt(n.toDouble()).toInt()
-    return (x * x == m || y * y == n) || x!= y
+    return (x * x == m || y * y == n) || x != y
 }
 
 /**
@@ -207,7 +209,7 @@ fun sin(x: Double, eps: Double): Double {
     {
         ans += d
         n++
-        d = pow(-1.0 , n + 1) * pow(y, 2 * n - 1) / factorial((2 * n - 1).toInt())
+        d = pow(-1.0, n + 1) * pow(y, 2 * n - 1) / factorial((2 * n - 1).toInt())
     }
     return ans
 }
@@ -277,7 +279,7 @@ fun isPalindrome(n: Int): Boolean =
 fun hasDifferentDigits(n: Int): Boolean {
     var number = n
     val del = n % 10
-    while ( number != 0)
+    while (number != 0)
     {
         if (number % 10 != del)
             return true
@@ -303,7 +305,7 @@ fun squareSequenceDigit(n: Int): Int {
         h = i * i
         if (digitNumber(h) < number) number -= digitNumber(h)
         else {
-            for(j in 1..digitNumber(h) - number){
+            for (j in 1..digitNumber(h) - number){
                 h /= 10
             }
             return h % 10
@@ -329,7 +331,7 @@ fun fibSequenceDigit(n: Int): Int {
         h = fib(i)
         if (digitNumber(h) < number) number -= digitNumber(h)
         else {
-            for(j in 1..digitNumber(h) - number) {
+            for (j in 1..digitNumber(h) - number) {
                 h /= 10
             }
             return h % 10

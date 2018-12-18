@@ -2,6 +2,9 @@
 
 package lesson6.task1
 
+import kotlinx.html.InputType
+import lesson2.task2.daysInMonth
+
 /**
  * Пример
  *
@@ -71,7 +74,18 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val months = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля",
+            "августа", "сентября", "октября", "ноября", "декабря")
+    val part = str.split(" ")
+    if (part.size != 3) return ""
+    val month = months.indexOf(part[1]) + 1
+    val days = part[0].toIntOrNull() ?: return ""
+    val years = part[2].toIntOrNull() ?: return ""
+    return if ((month != 0) && (daysInMonth(month, years) >= days))
+        String.format("%02d.%02d.%s", days, month, years)
+    else ""
+}
 
 /**
  * Средняя
@@ -83,7 +97,17 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val months = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля",
+            "августа", "сентября", "октября", "ноября", "декабря")
+    val part = digital.split(".")
+    if (part.size != 3) return ""
+    val days = part[0].toIntOrNull() ?: return ""
+    val years = part[2].toIntOrNull() ?: return ""
+    val month = part[1].toIntOrNull() ?: return ""
+    return if ((month !in 1..12) || (daysInMonth(month, years) < days)) ""
+    else String.format("%d %s %s", days, months[month - 1], years)
+}
 
 /**
  * Средняя
@@ -97,8 +121,10 @@ fun dateDigitToStr(digital: String): String = TODO()
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
-
+fun flattenPhoneNumber(phone: String): String =
+        if (phone.replace(Regex("""[-\s]"""), "")
+                        .matches(Regex("""(^(\+(?=\d+)|\d)\d*(\(\d+\))?\d*\d$)|(\d)""")))
+            phone.replace(Regex("""[^+\d]"""), "") else ""
 /**
  * Средняя
  *
@@ -109,7 +135,10 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int =
+        if (jumps.contains(Regex("""[^\s\d\-%]"""))) -1
+else jumps.split(" ").filter { Regex("""\d+""").matches(it) }.map { it.toInt() }.max() ?: -1
+
 
 /**
  * Сложная
@@ -121,7 +150,10 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int =
+        jumps.split(Regex("""(?<=[-%+])\s"""))
+                .filter { it.contains("+") }
+                .map { it.split(" ")[0].toInt() }.max() ?: -1
 
 /**
  * Сложная
@@ -132,7 +164,15 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    if (!Regex("\\d+(\\s[+\\-]\\s\\d+)*").matches(expression))
+        throw IllegalArgumentException()
+    return Regex("\\d+|[+\\-] \\d+").findAll(expression)
+            .map { it.value }
+            .map { it.filter { it != ' ' } }
+            .map { it.toInt() }
+            .sum()
+}
 
 /**
  * Сложная
